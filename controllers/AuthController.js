@@ -1,18 +1,12 @@
+const { User } = require("../models");
+
 class AuthController {
     static async register(req, res, next) {
-        const { name, username, email, password } = req.body
         try {
-            const foundUser = await User.findOne({
-                where: {
-                    [Op.or]: [{ email }, { username }],
-                },
-            });
+            await User.create(req.body);
 
-            if (foundUser) {
-
-            }
+            res.status(200).json({ status: true, message: "User Created Successfully" });
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }

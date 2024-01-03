@@ -32,7 +32,7 @@ module.exports = {
         allowNull: false,
         validate: {
           notEmpty: true,
-
+          isEmail: true
         }
       },
       password: {
