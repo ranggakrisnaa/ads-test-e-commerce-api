@@ -1,4 +1,4 @@
-const { Chart, Product, Order_Product, Order, sequelize } = require("../models");
+const { Chart, Product, Order_Product, User, Order, sequelize } = require("../models");
 class OrderController {
 
     static async addOrder(req, res, next) {
@@ -27,7 +27,6 @@ class OrderController {
             }
 
             let i = 1
-            // let totalPrice = 0
             for (const chart of foundCharts) {
                 const invoice = `INV-0${i}`
 
@@ -41,11 +40,12 @@ class OrderController {
                     throw { name: "InvalidQuantity" }
                 }
 
-                // await Order.create({
-                //     total_price: chart.quantity * product.price,
-                //     invoice,
-                //     status
-                // }, { transaction: t });
+                await Order_Product.create({
+                    quantity: chart.quantity,
+                    price: product.price,
+                    order_id: order.id,
+                    product_id: product.id
+                })
 
                 await order.update({
                     total_price: chart.quantity * product.price,
@@ -62,43 +62,73 @@ class OrderController {
                     by: chart.quantity,
                     transaction: t
                 })
-                // totalPrice += chart.quantity * product.price
-                // order.invoice = invoice
+
                 i++
             }
-            // order.total_price += totalPrice
 
-
-            // await order.save({ transaction: t })
             await t.commit();
-            res.status(201).json({ success: true, message: "Order created successfully" });
+            res.status(201).json({ success: true, message: "Order Product created successfully" });
         } catch (error) {
             await t.rollback();
             next(error);
         }
     }
 
-
-
     static async getAllOrder(req, res, next) {
         try {
+            const foundOrder = await Order.findAll({
+                include: [
+                    {
+                        model: Product,
+                        include: {
+                            model: User
+                        }
+                    }
+                ]
+            })
 
+            res.status(200).json({ success: true, message: "Order Product Retrieved Successfully", data: foundOrder })
         } catch (error) {
             next(error)
         }
     }
 
     static async updateStatusOrder(req, res, next) {
+        const { id } = req.params
+        const { status } = req.body
         try {
+            const foundOrder = await Order.findOne({
+                where: {
+                    id
+                }
+            })
 
+            if (!foundOrder) {
+                throw { name: "ErrNotFound" }
+            }
+
+            await foundOrder.update({ status })
+            res.status(200).json({ success: true, message: "Status Order Updated Successfully" })
         } catch (error) {
             next(error)
         }
     }
 
     static async deleteOrder(req, res, next) {
+        const { id } = req.params
         try {
+            const foundOrder = await Order.findOne({
+                where: {
+                    id
+                }
+            })
 
+            if (!foundOrder) {
+                throw { name: "ErrNotFound" }
+            }
+
+            await foundOrder.destroy()
+            res.status(200).json({ success: true, message: "Order Product Deleted Successfully" })
         } catch (error) {
             next(error)
         }

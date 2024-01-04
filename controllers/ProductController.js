@@ -14,7 +14,7 @@ class ProductController {
     static async getAllProduct(req, res, next) {
         try {
             const foundProduct = await Product.findAll()
-            console.log(foundProduct);
+
             res.status(200).json({
                 success: true, message: "Product Data Retrieved Successfully", data: foundProduct
             })

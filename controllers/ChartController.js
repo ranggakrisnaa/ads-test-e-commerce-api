@@ -88,7 +88,7 @@ class ChartController {
             }
 
             await foundChart.update({ quantity })
-            res.status(200).json({ success: true, message: "Chart Product Updated Successfully" })
+            res.status(200).json({ success: true, message: "Quantity Chart Product Updated Successfully" })
         } catch (error) {
             next(error)
         }
