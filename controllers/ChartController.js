@@ -9,23 +9,45 @@ class ChartController {
             const foundProduct = await Product.findOne({
                 where: {
                     id: product_id
-                },
-                transaction: t
-            })
+                }
+            }, { transaction: t })
 
             if (!foundProduct) {
                 throw { name: "ErrorNotFound" }
             }
 
-            if (quantity > foundProduct.stock) {
-                throw { name: "insufficientQuantity" }
+            const foundChartProd = await Chart.findOne({
+                where: {
+                    user_id: id,
+                    product_id: product_id
+                }
+            })
+
+            if (quantity > foundProduct.stock || (foundChartProd && foundChartProd.quantity > foundProduct.stock)) {
+                throw { name: "insufficientQuantity" };
             }
 
-            await Chart.create({
-                quantity: quantity,
-                product_id: foundProduct.id,
-                user_id: id
-            }, { transaction: t })
+            // if (quantity > foundProduct.stock || foundChartProd.quantity && foundChartProd.quantity > foundProduct.stock) {
+            //     throw { name: "insufficientQuantity" }
+            // }
+            // else {
+            //     await foundProduct.decrement('stock', {
+            //         by: quantity
+            //     })
+            // }
+
+            if (foundChartProd) {
+                await foundChartProd.increment('quantity', {
+                    by: quantity
+                })
+            } else {
+                await Chart.create({
+                    quantity: quantity,
+                    product_id: foundProduct.id,
+                    user_id: id
+                }, { transaction: t })
+            }
+
 
             await t.commit()
             res.status(201).json({ success: true, message: "Chart Product Created Successfully" })
