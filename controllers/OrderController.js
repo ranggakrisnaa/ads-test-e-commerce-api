@@ -12,6 +12,10 @@ class OrderController {
                 transaction: t
             });
 
+            if (foundCharts.length === 0) {
+                throw { name: "InvalidQuantity" }
+            }
+
             const order = await Order.create(
                 {
                     total_price: 0,
@@ -35,10 +39,6 @@ class OrderController {
                         id: chart.Product.id
                     }
                 })
-
-                if (chart.quantity < 1) {
-                    throw { name: "InvalidQuantity" }
-                }
 
                 await Order_Product.create({
                     quantity: chart.quantity,
@@ -104,7 +104,7 @@ class OrderController {
             })
 
             if (!foundOrder) {
-                throw { name: "ErrNotFound" }
+                throw { name: "ErrorNotFound" }
             }
 
             await foundOrder.update({ status })
@@ -124,7 +124,7 @@ class OrderController {
             })
 
             if (!foundOrder) {
-                throw { name: "ErrNotFound" }
+                throw { name: "ErrorNotFound" }
             }
 
             await foundOrder.destroy()
