@@ -31,7 +31,7 @@ class AuthMiddleware {
     }
 
     static async authorize(req, res, next) {
-        if (req.loggedUser.role !== "seller" && req.loggedUser.name !== "admin") {
+        if (req.loggedUser.role !== "seller") {
             throw { name: "Unauthorized" }
         }
         next()
