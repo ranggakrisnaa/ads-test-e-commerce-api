@@ -35,14 +35,14 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     SKU: DataTypes.STRING,
     price: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     stock: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true

@@ -30,7 +30,7 @@ class AuthMiddleware {
         }
     }
 
-    static async authorize(req, res, next) {
+    static authorize(req, res, next) {
         if (req.loggedUser.role !== "seller") {
             throw { name: "Unauthorized" }
         }
