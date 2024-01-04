@@ -2,8 +2,9 @@ const { Product, sequelize } = require("../models");
 
 class ProductController {
     static async addProduct(req, res, next) {
+        const imagePath = `http://localhost:${process.env.PORT}/${req.file.path}`;
         try {
-            await Product.create(req.body)
+            await Product.create({ ...req.body, img_url: imagePath })
 
             res.status(201).json({ success: true, message: "Product Created Successfully" })
         } catch (error) {
@@ -14,7 +15,7 @@ class ProductController {
     static async getAllProduct(req, res, next) {
         try {
             const foundProduct = await Product.findAll()
-            console.log(foundProduct);
+
             res.status(200).json({
                 success: true, message: "Product Data Retrieved Successfully", data: foundProduct
             })
@@ -34,15 +35,23 @@ class ProductController {
             })
 
             if (!foundProduct) {
-                throw { name: "ErrNotFound" }
+                throw { name: "ErrorNotFound" }
             }
 
-            const payload = {
+            let payload = {
                 title: title || foundProduct.title,
                 description: description || foundProduct.description,
                 SKU: SKU || foundProduct.SKU,
                 price: price || foundProduct.price,
                 stock: stock || foundProduct.stock
+            }
+
+            if (req.file) {
+                const imagePath = `http://localhost:${process.env.PORT}/${req.file.path}`;
+                payload = {
+                    ...payload,
+                    img_url: imagePath,
+                };
             }
 
             await foundProduct.update(payload);

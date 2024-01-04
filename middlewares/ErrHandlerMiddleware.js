@@ -9,6 +9,9 @@ class ErrHandlerMiddleware {
             case 'Unauthenticated':
                 res.status(401).json({ success: false, message: "Unauthenticated User" });
                 break
+            case 'InvalidQuantity':
+                res.status(400).json({ success: false, message: "Quantity should be greater than 0 to place an order" });
+                break
             case 'insufficientQuantity':
                 res.status(400).json({ status: false, message: "Insufficient quantity of Product" });
                 break

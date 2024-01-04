@@ -5,10 +5,11 @@ const router = require('./routes')
 const app = express()
 const port = process.env.PORT
 
+app.use("/public", express.static("public"));
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api/v1', router)
-
 
 app.use(ErrHandlerMiddleware.handleError);
 
