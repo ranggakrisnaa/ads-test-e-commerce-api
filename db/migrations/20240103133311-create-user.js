@@ -43,6 +43,14 @@ module.exports = {
 
         }
       },
+      role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -43,7 +43,16 @@ module.exports = (sequelize, DataTypes) => {
 
       }
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { notEmpty: true },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { notEmpty: true },
+    }
   }, {
     hooks: {
       beforeUpdate: (user, option) => {
