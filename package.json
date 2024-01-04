@@ -13,6 +13,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "migrate": "npx sequelize db:migrate",
+    "undo-migrate": "npx sequelize db:migrate:undo:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "rangga",

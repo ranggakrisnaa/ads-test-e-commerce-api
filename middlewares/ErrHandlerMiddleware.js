@@ -6,9 +6,18 @@ class ErrHandlerMiddleware {
             case 'InvalidCredentials':
                 res.status(401).json({ status: false, message: 'Incorrect username/email or password' })
                 break
+            case 'Unauthenticated':
+                res.status(401).json({ status: false, message: "Unauthenticated User" });
+                break
+            case 'ErrorNotFound':
+                res.status(404).json({ status: false, message: "Error Not Found" });
+                break
             case 'SequelizeValidationError':
                 messages = err.errors.map((currentError) => currentError.message);
                 res.status(404).json({ status: false, message: messages });
+                break
+            case 'JsonWebTokenError':
+                res.status(401).json({ status: false, message: err.message });
                 break
             case 'SequelizeUniqueConstraintError':
                 messages = err.errors.map((currentError) => currentError.message);

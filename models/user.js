@@ -12,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Chart, { foreignKey: "user_id" })
+      User.belongsToMany(models.Product, {
+        foreignKey: "user_id",
+        through: models.Chart
+      })
+      User.hasMany(models.Order, { foreignKey: "user_id" })
+
     }
   }
   User.init({
@@ -39,12 +46,12 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   }, {
     hooks: {
-      beforeUpdate: async (user, option) => {
-        const hashedPassword = await BcryptUtil.hashPassword(user.password);
+      beforeUpdate: (user, option) => {
+        const hashedPassword = BcryptUtil.hashPassword(user.password);
         user.password = hashedPassword;
       },
-      beforeCreate: async (user, option) => {
-        const hashedPassword = await BcryptUtil.hashPassword(user.password);
+      beforeCreate: (user, option) => {
+        const hashedPassword = BcryptUtil.hashPassword(user.password);
         user.password = hashedPassword;
       },
     },

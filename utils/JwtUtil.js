@@ -6,6 +6,15 @@ class JwtUtil {
     static signToken(userId) {
         return jwt.sign({ userId }, JwtUtil.privateKey, { expiresIn: "1d" });
     }
+
+    static verifyToken(token) {
+        try {
+            const decoded = jwt.verify(token, JwtUtil.privateKey);
+            return decoded
+        } catch (err) {
+            throw err
+        }
+    }
 }
 
 module.exports = JwtUtil
