@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Chart.belongsTo(models.Product, { foreignKey: "product_id" })
+      Chart.belongsTo(models.User, { foreignKey: "user_id" })
     }
   }
   Chart.init({

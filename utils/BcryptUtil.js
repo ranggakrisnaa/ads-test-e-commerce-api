@@ -1,11 +1,9 @@
+const bcrypt = require('bcrypt')
 class BcryptUtil {
-
-    constructor() {
-        this.saltRounds = 10;
-    }
+    static saltRounds = 10;
 
     static hashPassword(password) {
-        return bcrypt.hashSync(password, saltRounds);
+        return bcrypt.hashSync(password, BcryptUtil.saltRounds);
     }
 
     static comparePassword(password, hashedPassword) {

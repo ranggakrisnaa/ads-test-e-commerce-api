@@ -24,9 +24,6 @@ module.exports = {
       stock: {
         type: Sequelize.STRING
       },
-      user_id: {
-        type: Sequelize.INTEGER
-      },
       img_url: {
         type: Sequelize.STRING
       },
