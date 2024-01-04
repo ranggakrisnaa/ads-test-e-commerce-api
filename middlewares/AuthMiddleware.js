@@ -2,7 +2,7 @@ const JwtUtil = require("../utils/JwtUtil");
 const { User } = require("../models");
 
 class AuthMiddleware {
-    static async auth(req, res, next) {
+    static async authenticate(req, res, next) {
         try {
             const authHeaders = req.headers.authorization
             if (!authHeaders) throw { name: "Unauthenticated" };
@@ -28,6 +28,13 @@ class AuthMiddleware {
         } catch (error) {
             next(error)
         }
+    }
+
+    static async authorize(req, res, next) {
+        if (req.loggedUser.role !== "seller" && req.loggedUser.name !== "admin") {
+            throw { name: "Unauthorized" }
+        }
+        next()
     }
 }
 
