@@ -16,7 +16,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Chart.init({
-    quantity: DataTypes.INTEGER,
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     user_id: DataTypes.INTEGER,
     product_id: DataTypes.INTEGER
   }, {

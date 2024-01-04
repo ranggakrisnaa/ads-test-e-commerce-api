@@ -5,7 +5,7 @@ class ProductController {
         try {
             await Product.create(req.body)
 
-            res.status(200).json({ success: true, message: "Product Created Successfully" })
+            res.status(201).json({ success: true, message: "Product Created Successfully" })
         } catch (error) {
             next(error)
         }
@@ -67,6 +67,7 @@ class ProductController {
                 throw { name: "ErrorNotFound" }
             }
 
+            await foundProduct.destroy()
             res
                 .status(200)
                 .json({ sucess: true, message: "Product Deleted Successfully" });
