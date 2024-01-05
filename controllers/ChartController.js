@@ -27,14 +27,6 @@ class ChartController {
                 throw { name: "insufficientQuantity" };
             }
 
-            // if (quantity > foundProduct.stock || foundChartProd.quantity && foundChartProd.quantity > foundProduct.stock) {
-            //     throw { name: "insufficientQuantity" }
-            // }
-            // else {
-            //     await foundProduct.decrement('stock', {
-            //         by: quantity
-            //     })
-            // }
 
             if (foundChartProd) {
                 await foundChartProd.increment('quantity', {
