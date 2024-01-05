@@ -14,8 +14,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "migrate": "npx sequelize db:migrate",
-    "undo-migrate": "npx sequelize db:migrate:undo:all",
+    "migrate": "npx sequelize db:migrate && npx sequelize-cli db:seed:all",
+    "undo-migrate": "npx sequelize db:migrate:undo:all && npx sequelize-cli db:seed:undo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "rangga",

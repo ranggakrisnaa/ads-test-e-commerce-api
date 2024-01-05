@@ -3,16 +3,17 @@ class OrderController {
 
     static async addOrder(req, res, next) {
         const { id } = req.loggedUser;
-        const { status } = req.body;
+        const { status, invoice } = req.body;
         const t = await sequelize.transaction();
         try {
             const foundCharts = await Chart.findAll({
                 where: { user_id: id },
                 include: [{ model: Product }],
+                order: [['createdAt', 'DESC']],
                 transaction: t
             });
 
-            if (foundCharts.length === 0) {
+            if (foundCharts[0].quantity === 0) {
                 throw { name: "InvalidQuantity" }
             }
 
@@ -30,15 +31,17 @@ class OrderController {
                 throw { name: "ErrorNotFound" };
             }
 
-            let i = 1
+            let totalPrice = 0;
             for (const chart of foundCharts) {
-                const invoice = `INV-0${i}`
 
                 const product = await Product.findOne({
                     where: {
                         id: chart.Product.id
                     }
                 })
+
+                const productPrice = product.price * chart.quantity;
+                totalPrice += productPrice;
 
                 await Order_Product.create({
                     quantity: chart.quantity,
@@ -47,11 +50,7 @@ class OrderController {
                     product_id: product.id
                 })
 
-                await order.update({
-                    total_price: chart.quantity * product.price,
-                    invoice,
-                    status
-                }, { transaction: t });
+
 
                 await product.decrement('stock', {
                     by: chart.quantity,
@@ -63,8 +62,14 @@ class OrderController {
                     transaction: t
                 })
 
-                i++
             }
+
+            await order.update({
+                total_price: totalPrice,
+                invoice,
+                status,
+                user_id: id
+            }, { transaction: t });
 
             await t.commit();
             res.status(201).json({ success: true, message: "Order Product created successfully" });
