@@ -11,7 +11,7 @@ Make sure you have Node.js and npm installed on your machine before proceeding.
 
 1. Clone this repository.
 2. `cd` into the project directory.
-3. Run `npm install` to install all dependencies.
+3. Run `yarn install` to install all dependencies.
 
 ## Usage
 
