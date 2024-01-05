@@ -29,10 +29,10 @@ Make sure you have Node.js and npm installed on your machine before proceeding.
 
 2. Ensure you have created a database with the appropriate name.
 
-3. To run table migrations, use the command:
+3. To run table migrations and seeder automate, use the command:
 
     ```bash
-    npx sequelize-cli db:migrate
+    npm run migrate
     ```
 
 4. Start the application with the command:
